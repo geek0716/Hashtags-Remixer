@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashtag Remixer Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --warning-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 1rem;
+            border: 2px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .hashtag-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.875rem;
+            color: #666;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remix-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .remix-btn:hover {
+            background-color: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .copy-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .output-container {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            min-height: 100px;
+            word-wrap: break-word;
+            border: 2px solid #e1e1e1;
+        }
+
+        .hashtag {
+            display: inline-block;
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .hashtag:hover {
+            background-color: #bbdefb;
+        }
+
+        .message {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            animation: fadeOut 2s forwards;
+            opacity: 0;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hashtag Remixer Pro</h1>
+        <p class="description">Enter up to 25 hashtags, separated by spaces or commas, and watch the magic happen!</p>
+        
+        <div class="input-container">
+            <textarea id="inputHashtags" placeholder="Enter your hashtags here... (e.g., #love #photography #nature)"></textarea>
+            <div class="hashtag-count">0/25 hashtags</div>
+        </div>
+
+        <div class="button-group">
+            <button class="remix-btn" onclick="remixHashtags()">
+                <i class="fas fa-random"></i>
+                Remix Hashtags
+            </button>
+            <button class="copy-btn" id="copyButton" style="display: none;" onclick="copyHashtags()">
+                <i class="fas fa-copy"></i>
+                Copy to Clipboard
+            </button>
+        </div>
+
+        <div class="output-container" id="hashtagBox"></div>
+        <div id="copyMessage" class="message success">Copied to clipboard!</div>
+    </div>
+
+    <script>
+        function updateHashtagCount() {
+            const input = document.getElementById('inputHashtags').value.trim();
+            const hashtags = input ? input.split(/[\s,]+/).filter(tag => tag) : [];
+            const countDisplay = document.querySelector('.hashtag-count');
+            countDisplay.textContent = `${hashtags.length}/25 hashtags`;
+            
+            if (hashtags.length > 25) {
+                countDisplay.style.color = var('--warning-color');
+            } else {
+                countDisplay.style.color = '#666';
+            }
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function remixHashtags() {
+            const input = document.getElementById('inputHashtags').value.trim();
+            let hashtags = input.split(/[\s,]+/).filter(tag => tag);
+            
+            if (hashtags.length > 25) {
+                hashtags = hashtags.slice(0, 25);
+                alert("Only the first 25 hashtags will be used.");
+            }
+            
+            hashtags = shuffleArray(hashtags);
+            
+            const hashtagBox = document.getElementById('hashtagBox');
+            hashtagBox.innerHTML = hashtags
+                .map(tag => `<span class="hashtag">${tag}</span>`)
+                .join(' ');
+            
+            document.getElementById('copyButton').style.display = hashtags.length ? 'flex' : 'none';
+            document.getElementById('copyMessage').style.opacity = '0';
+        }
+
+        function copyHashtags() {
+            const hashtagBox = document.getElementById('hashtagBox');
+            const hashtags = Array.from(hashtagBox.getElementsByClassName('hashtag'))
+                .map(span => span.textContent)
+                .join(' ');
+            
+            navigator.clipboard.writeText(hashtags).then(() => {
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.opacity = '1';
+                setTimeout(() => {
+                    copyMessage.style.opacity = '0';
+                }, 2000);
+            });
+        }
+
+        // Add event listener for hashtag count
+        document.getElementById('inputHashtags').addEventListener('input', updateHashtagCount);
+    </script>
+</body>
+</html>
