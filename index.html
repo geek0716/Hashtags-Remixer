@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head and style sections remain the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hashtag Remixer Pro</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* Previous styles remain the same */
         :root {
             --primary-color: #4a90e2;
             --success-color: #2ecc71;
@@ -62,7 +64,7 @@
 
         textarea {
             width: 100%;
-            height: 120px;
+            height: 150px;
             padding: 1rem;
             border: 2px solid #e1e1e1;
             border-radius: var(--border-radius);
@@ -70,6 +72,7 @@
             resize: vertical;
             transition: all 0.3s ease;
             background-color: #fff;
+            line-height: 1.5;
         }
 
         textarea:focus {
@@ -128,6 +131,8 @@
             min-height: 100px;
             word-wrap: break-word;
             border: 2px solid #e1e1e1;
+            white-space: pre-wrap;
+            line-height: 1.5;
         }
 
         .copy-container {
@@ -148,17 +153,19 @@
         }
 
         .hashtag {
-            display: inline-block;
+            display: inline;
             background-color: #e3f2fd;
             color: var(--primary-color);
             padding: 0.25rem 0.5rem;
-            margin: 0.25rem;
+            margin: 0 0.25rem;
             border-radius: 4px;
             transition: all 0.2s ease;
+            line-height: 2;
         }
 
-        .hashtag:hover {
-            background-color: #bbdefb;
+        .normal-text {
+            display: inline;
+            white-space: pre-wrap;
         }
 
         .message {
@@ -190,10 +197,10 @@
 <body>
     <div class="container">
         <h1>Hashtag Remixer Pro</h1>
-        <p class="description">Enter up to 25 hashtags, separated by spaces or commas, and watch the magic happen!</p>
+        <p class="description">Enter your text with hashtags - only hashtags will be shuffled!</p>
         
         <div class="input-container">
-            <textarea id="inputHashtags" placeholder="Enter your hashtags here... (e.g., #love #photography #nature)">#example #hashtags #gohere</textarea>
+            <textarea id="inputHashtags" placeholder="Enter your text and hashtags here...">Movie/Title👉 example.com #Example1 #Example2 #Exaample3 </textarea>
             <div class="hashtag-count">0/25 hashtags</div>
         </div>
 
@@ -217,17 +224,44 @@
     </div>
 
     <script>
-        // Function to process hashtags from input
-        function processHashtags(input) {
-            let hashtags = input.split(/[\s,\n]+/).filter(tag => tag.trim());
-            hashtags = hashtags.map(tag => tag.startsWith('#') ? tag : '#' + tag);
-            return hashtags;
+        function parseContent(input) {
+            // Split the input into lines to preserve line breaks
+            const lines = input.split('\n');
+            const result = [];
+            const allHashtags = [];
+            
+            // Process each line
+            lines.forEach(line => {
+                const parts = [];
+                let currentText = '';
+                const words = line.split(/(\s+)/);
+                
+                words.forEach(word => {
+                    if (word.trim().startsWith('#')) {
+                        if (currentText) {
+                            parts.push({ type: 'text', content: currentText });
+                            currentText = '';
+                        }
+                        parts.push({ type: 'hashtag', content: word.trim() });
+                        allHashtags.push(word.trim());
+                    } else {
+                        currentText += word;
+                    }
+                });
+                
+                if (currentText) {
+                    parts.push({ type: 'text', content: currentText });
+                }
+                
+                result.push(parts);
+            });
+            
+            return { parsedContent: result, hashtags: allHashtags };
         }
 
-        // Function to update hashtag count
         function updateHashtagCount() {
-            const input = document.getElementById('inputHashtags').value.trim();
-            const hashtags = processHashtags(input);
+            const input = document.getElementById('inputHashtags').value;
+            const { hashtags } = parseContent(input);
             const countDisplay = document.querySelector('.hashtag-count');
             countDisplay.textContent = `${hashtags.length}/25 hashtags`;
             
@@ -238,7 +272,6 @@
             }
         }
 
-        // Function to shuffle array
         function shuffleArray(array) {
             const newArray = [...array];
             for (let i = newArray.length - 1; i > 0; i--) {
@@ -248,42 +281,53 @@
             return newArray;
         }
 
-        // Function to remix hashtags
         function remixHashtags() {
-            const input = document.getElementById('inputHashtags').value.trim();
-            if (!input) {
-                alert("Please enter some hashtags first!");
+            const input = document.getElementById('inputHashtags').value;
+            if (!input.trim()) {
+                alert("Please enter some text with hashtags!");
                 return;
             }
 
-            let hashtags = processHashtags(input);
+            const { parsedContent, hashtags } = parseContent(input);
             
             if (hashtags.length > 25) {
-                hashtags = hashtags.slice(0, 25);
                 alert("Only the first 25 hashtags will be used.");
             }
-            
-            const shuffledHashtags = shuffleArray(hashtags);
-            
+
+            // Shuffle hashtags
+            let shuffledHashtags = shuffleArray(hashtags.slice(0, 25));
+            let hashtagIndex = 0;
+
+            // Reconstruct the content with shuffled hashtags
+            const outputContent = parsedContent.map(line => {
+                const lineContent = line.map(part => {
+                    if (part.type === 'hashtag' && hashtagIndex < shuffledHashtags.length) {
+                        return `<span class="hashtag">${shuffledHashtags[hashtagIndex++]}</span>`;
+                    } else if (part.type === 'text') {
+                        return `<span class="normal-text">${part.content}</span>`;
+                    }
+                    return '';
+                }).join('');
+                return lineContent;
+            }).join('\n');
+
             const hashtagBox = document.getElementById('hashtagBox');
-            hashtagBox.innerHTML = shuffledHashtags
-                .map(tag => `<span class="hashtag">${tag}</span>`)
-                .join(' ');
+            hashtagBox.innerHTML = outputContent;
         }
 
-        // Function to copy hashtags
         function copyHashtags() {
             const hashtagBox = document.getElementById('hashtagBox');
             if (!hashtagBox.textContent.trim()) {
-                alert("No hashtags to copy!");
+                alert("No content to copy!");
                 return;
             }
 
-            const hashtags = Array.from(hashtagBox.getElementsByClassName('hashtag'))
-                .map(span => span.textContent)
-                .join(' ');
-            
-            navigator.clipboard.writeText(hashtags).then(() => {
+            // Get the text content while preserving line breaks
+            const content = Array.from(hashtagBox.childNodes)
+                .map(node => node.textContent)
+                .join('');
+
+            navigator.clipboard.writeText(content).then(() => {
                 const copyMessage = document.getElementById('copyMessage');
                 copyMessage.style.display = 'block';
                 setTimeout(() => {
