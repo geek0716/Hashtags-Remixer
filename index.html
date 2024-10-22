@@ -24,7 +24,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -154,22 +154,12 @@
 
         .message {
             text-align: center;
-            padding: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
             border-radius: var(--border-radius);
-            animation: fadeOut 2s forwards;
-            opacity: 0;
-        }
-
-        .success {
             background-color: #d4edda;
             color: #155724;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -197,7 +187,7 @@
         <p class="description">Enter up to 25 hashtags, separated by spaces or commas, and watch the magic happen!</p>
         
         <div class="input-container">
-            <textarea id="inputHashtags" placeholder="Enter your hashtags here... (e.g., #love #photography #nature)"></textarea>
+            <textarea id="inputHashtags" placeholder="Enter your hashtags here... (e.g., #love #photography #nature)">#example #hashtags #gohere</textarea>
             <div class="hashtag-count">0/25 hashtags</div>
         </div>
 
@@ -206,75 +196,108 @@
                 <i class="fas fa-random"></i>
                 Remix Hashtags
             </button>
-            <button class="copy-btn" id="copyButton" style="display: none;" onclick="copyHashtags()">
+            <button class="copy-btn" id="copyButton" onclick="copyHashtags()">
                 <i class="fas fa-copy"></i>
                 Copy to Clipboard
             </button>
         </div>
 
         <div class="output-container" id="hashtagBox"></div>
-        <div id="copyMessage" class="message success">Copied to clipboard!</div>
+        <div id="copyMessage" class="message">Copied to clipboard!</div>
     </div>
 
     <script>
+        // Function to process hashtags from input
+        function processHashtags(input) {
+            // Split by spaces, commas, or newlines and filter empty strings
+            let hashtags = input.split(/[\s,\n]+/).filter(tag => tag.trim());
+            
+            // Add # to tags that don't have it
+            hashtags = hashtags.map(tag => tag.startsWith('#') ? tag : '#' + tag);
+            
+            return hashtags;
+        }
+
+        // Function to update hashtag count
         function updateHashtagCount() {
             const input = document.getElementById('inputHashtags').value.trim();
-            const hashtags = input ? input.split(/[\s,]+/).filter(tag => tag) : [];
+            const hashtags = processHashtags(input);
             const countDisplay = document.querySelector('.hashtag-count');
             countDisplay.textContent = `${hashtags.length}/25 hashtags`;
             
             if (hashtags.length > 25) {
-                countDisplay.style.color = var('--warning-color');
+                countDisplay.style.color = '#e74c3c';
             } else {
                 countDisplay.style.color = '#666';
             }
         }
 
+        // Function to shuffle array
         function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            const newArray = [...array]; // Create a copy of the array
+            for (let i = newArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
             }
-            return array;
+            return newArray;
         }
 
+        // Function to remix hashtags
         function remixHashtags() {
             const input = document.getElementById('inputHashtags').value.trim();
-            let hashtags = input.split(/[\s,]+/).filter(tag => tag);
+            if (!input) {
+                alert("Please enter some hashtags first!");
+                return;
+            }
+
+            let hashtags = processHashtags(input);
             
             if (hashtags.length > 25) {
                 hashtags = hashtags.slice(0, 25);
                 alert("Only the first 25 hashtags will be used.");
             }
             
-            hashtags = shuffleArray(hashtags);
+            const shuffledHashtags = shuffleArray(hashtags);
             
             const hashtagBox = document.getElementById('hashtagBox');
-            hashtagBox.innerHTML = hashtags
+            hashtagBox.innerHTML = shuffledHashtags
                 .map(tag => `<span class="hashtag">${tag}</span>`)
                 .join(' ');
             
-            document.getElementById('copyButton').style.display = hashtags.length ? 'flex' : 'none';
-            document.getElementById('copyMessage').style.opacity = '0';
+            document.getElementById('copyButton').style.display = 'flex';
         }
 
+        // Function to copy hashtags
         function copyHashtags() {
             const hashtagBox = document.getElementById('hashtagBox');
+            if (!hashtagBox.textContent.trim()) {
+                alert("No hashtags to copy!");
+                return;
+            }
+
             const hashtags = Array.from(hashtagBox.getElementsByClassName('hashtag'))
                 .map(span => span.textContent)
                 .join(' ');
             
+            // Use the clipboard API
             navigator.clipboard.writeText(hashtags).then(() => {
                 const copyMessage = document.getElementById('copyMessage');
-                copyMessage.style.opacity = '1';
+                copyMessage.style.display = 'block';
                 setTimeout(() => {
-                    copyMessage.style.opacity = '0';
+                    copyMessage.style.display = 'none';
                 }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy to clipboard. Please try again.');
             });
         }
 
-        // Add event listener for hashtag count
-        document.getElementById('inputHashtags').addEventListener('input', updateHashtagCount);
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('inputHashtags').addEventListener('input', updateHashtagCount);
+            updateHashtagCount(); // Initial count update
+            remixHashtags(); // Initial remix
+        });
     </script>
 </body>
 </html>
