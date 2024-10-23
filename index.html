@@ -346,6 +346,82 @@
             remixHashtags();
         });
     </script>
+    <div id="visitor-counter-root"></div>
+
+<script type="module">
+  // Initialize visitor counter
+  const counterContainer = document.getElementById('visitor-counter-root');
+  
+  // Track current session
+  let currentVisitors = parseInt(localStorage.getItem('currentVisitors')) || 1;
+  let totalVisits = parseInt(localStorage.getItem('totalVisits')) || 0;
+  
+  // Update counters
+  function updateCounters() {
+    // Increment total visits if this is a new session
+    if (!sessionStorage.getItem('counted')) {
+      totalVisits++;
+      localStorage.setItem('totalVisits', totalVisits);
+      sessionStorage.setItem('counted', 'true');
+    }
+    
+    // Update display
+    counterContainer.innerHTML = `
+      <div style="
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        text-align: center;
+      ">
+        <div style="
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+        ">
+          <div>
+            <div style="
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--primary-color);
+            ">${currentVisitors}</div>
+            <div style="
+              font-size: 0.875rem;
+              color: #666;
+            ">Current Visitors</div>
+          </div>
+          <div>
+            <div style="
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--primary-color);
+            ">${totalVisits}</div>
+            <div style="
+              font-size: 0.875rem;
+              color: #666;
+            ">Total Visits</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Update display initially
+  updateCounters();
+  
+  // Simulate other visitors (random number between 1-20)
+  setInterval(() => {
+    currentVisitors = Math.floor(Math.random() * 20) + 1;
+    localStorage.setItem('currentVisitors', currentVisitors);
+    updateCounters();
+  }, 30000); // Updates every 30 seconds
+  
+  // Update when user leaves
+  window.addEventListener('beforeunload', () => {
+    currentVisitors = Math.max(1, currentVisitors - 1);
+    localStorage.setItem('currentVisitors', currentVisitors);
+  });
+</script>
     <div class="container">
         <!-- Existing content -->
 
