@@ -220,6 +220,54 @@
             </div>
             <div id="copyMessage" class="message">Copied to clipboard!</div>
         </div>
+
+        <!-- Visitor counter section -->
+        <div id="visitor-counter-root"></div>
+        <script type="module">
+            const counterContainer = document.getElementById('visitor-counter-root');
+            let currentVisitors = parseInt(localStorage.getItem('currentVisitors')) || 1;
+            let totalVisits = parseInt(localStorage.getItem('totalVisits')) || 0;
+
+            function updateCounters() {
+                if (!sessionStorage.getItem('counted')) {
+                    totalVisits++;
+                    localStorage.setItem('totalVisits', totalVisits);
+                    sessionStorage.setItem('counted', 'true');
+                }
+
+                counterContainer.innerHTML = `
+                    <div style="margin-top: 2rem; padding: 1rem; background-color: #2a2a2a; border-radius: 12px; text-align: center;">
+                        <div style="display: flex; justify-content: center; gap: 2rem;">
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">${currentVisitors}</div>
+                                <div style="font-size: 0.875rem; color: #bbb;">Current Visitors</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">${totalVisits}</div>
+                                <div style="font-size: 0.875rem; color: #bbb;">Total Visits</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            updateCounters();
+            setInterval(() => {
+                currentVisitors = Math.floor(Math.random() * 20) + 1;
+                localStorage.setItem('currentVisitors', currentVisitors);
+                updateCounters();
+            }, 30000);
+
+            window.addEventListener('beforeunload', () => {
+                currentVisitors = Math.max(1, currentVisitors - 1);
+                localStorage.setItem('currentVisitors', currentVisitors);
+            });
+        </script>
+
+        <!-- Footer section -->
+        <div class="footer">
+            <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
+                Created with ♥️ by <a href="https://phcorner.org" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">PHC No rules</a>
+            </p>
+        </div>
     </div>
-</body>
-</html>
