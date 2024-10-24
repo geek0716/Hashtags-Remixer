@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Hashtag Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1b1b1b;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6f61;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        label {
+            font-size: 1.2rem;
+            display: block;
+            margin: 10px 0;
+        }
+        select, input[type="checkbox"] {
+            margin-top: 10px;
+        }
+        .shuffle-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .shuffle-btn:hover {
+            background-color: #e65b50;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #3b3b3b;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            word-wrap: break-word;
+        }
+        .checkbox-group {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Movie Hashtag Generator</h1>
+
+    <div class="checkbox-group">
+        <label><input type="checkbox" id="movieRelated" checked> Include Movie-Related Hashtags</label>
+        <label><input type="checkbox" id="facebookReels" checked> Include Facebook Reels Popular Hashtags</label>
+        <label><input type="checkbox" id="streaming" checked> Include Streaming Platform Hashtags</label>
+    </div>
+
+    <label for="numHashtags">Select the number of hashtags to generate (Max 25):</label>
+    <select id="numHashtags">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+    </select>
+
+    <button class="shuffle-btn" onclick="generateHashtags()">Generate Hashtags</button>
+
+    <div id="result">Your hashtags will appear here</div>
+</div>
+
+<script>
+    const hashtagDatabase = {
+        movieRelated: [
+            "#movienight", "#FilmBuff", "#movierecommendations", "#cinemalovers", "#NowWatching", 
+            "#mustwatchmovies", "#classicfilms", "#Popcorntime", "#moviequotes", "#actionmovies", 
+            "#comedyfilms", "#horrornight", "#bestmovie", "#filmreview", "#cinephile", 
+            "#boxofficehits", "#newrelease", "#Indiefilms", "#moviemarathon", "#directorscut", "#bestmovie2024", "#bestmovielines", "#bestmoviescene", "#bestfilms", "#movietime", "#movieaddict", "#moviemagic", "#films", "#FULLHD", "#hollywood", "#movieclips", "#movielovers", "#bestmovieever", "#viralmovie2024"
+        ],
+        facebookReels: [
+            "#reels", "#facebookreels", "#reelstrending", "#viralreels", "#reels2024", 
+            "#reelschallenge", "#ReelsOfTheDay", "#reelsideas", "#trendingreels", "#reelsstars", 
+            "#facebookreeislove", "#reelsfyp", "#reelsmagic", "#reelsjourney", "#reelsvibes", "#2024trends", "#reelsviral", "#reelsvideo", "#fyp", "#foryou", "#foryoupage", "#reelsfb", "#viralvideo", "#reelsfypシ゚", "#reelsvideoシ", "#reelsviralシ", "#reelsfbシ", "#reelsfypシ2024", "#fypviralシ", "#fypシ゚", "#reelsfacebook"
+        ],
+        streaming: [
+            "#Netflix", "#PrimeVideo", "#Hulu", "#DisneyPlus", "#HBO", 
+            "#Peacock", "#ParamountPlus", "#AppleTV", "#Streamnow", "#Bingewatch", 
+            "#streamingaddict", "#netflixandchill", "#atchparty", "#streamteam", "#Nowshowing", 
+            "#streaminglife", "#bingeworthy", "#Couchpotato", "#Catchuponshows", "#Juststreamit", "#netflixseries", "#netflixmovies", "#hbomax", "#new"
+        ]
+    };
+
+    function getRandomHashtag(categoryArray) {
+        const randomIndex = Math.floor(Math.random() * categoryArray.length);
+        return categoryArray.splice(randomIndex, 1)[0]; // Remove and return a random hashtag
+    }
+
+    function generateHashtags() {
+        let selectedHashtags = [];
+        const numHashtags = parseInt(document.getElementById('numHashtags').value);
+
+        // Create copies of the arrays to avoid modifying the original database
+        let movieRelatedHashtags = [...hashtagDatabase.movieRelated];
+        let facebookReelsHashtags = [...hashtagDatabase.facebookReels];
+        let streamingHashtags = [...hashtagDatabase.streaming];
+        
+        const checkedCategories = [];
+        if (document.getElementById('movieRelated').checked) checkedCategories.push('movieRelated');
+        if (document.getElementById('facebookReels').checked) checkedCategories.push('facebookReels');
+        if (document.getElementById('streaming').checked) checkedCategories.push('streaming');
+
+        // Distribute the number of hashtags evenly between checked categories
+        const hashtagsPerCategory = Math.floor(numHashtags / checkedCategories.length);
+        let extraHashtags = numHashtags % checkedCategories.length;
+
+        for (let category of checkedCategories) {
+            let currentCategoryHashtags = [];
+            switch (category) {
+                case 'movieRelated':
+                    currentCategoryHashtags = movieRelatedHashtags;
+                    break;
+                case 'facebookReels':
+                    currentCategoryHashtags = facebookReelsHashtags;
+                    break;
+                case 'streaming':
+                    currentCategoryHashtags = streamingHashtags;
+                    break;
+            }
+            for (let i = 0; i < hashtagsPerCategory; i++) {
+                selectedHashtags.push(getRandomHashtag(currentCategoryHashtags));
+            }
+
+            // Distribute any extra hashtags (if numHashtags isn't evenly divisible)
+            if (extraHashtags > 0) {
+                selectedHashtags.push(getRandomHashtag(currentCategoryHashtags));
+                extraHashtags--;
+            }
+        }
+
+        // Shuffle the selected hashtags to add randomness
+        selectedHashtags = selectedHashtags.sort(() => Math.random() - 0.5);
+
+        document.getElementById('result').innerText = selectedHashtags.join(' ');
+    }
+</script>
+
+</body>
+</html>
