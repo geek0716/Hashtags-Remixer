@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Your Movie & TV Streaming Platform</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/carousel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">StreamFlix</a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="movies.html">Movies</a></li>
+                    <li><a href="tvshows.html">TV Shows</a></li>
+                    <li><a href="#" id="trending-toggle">Trending</a></li>
+                </ul>
+            </nav>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search for movies, TV shows...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="search-results" id="search-results"></div>
+                <div class="advanced-search">
+                    <button id="advanced-search-toggle"><i class="fas fa-filter"></i> Filters</button>
+                    <div class="filter-options" id="filter-options">
+                        <div class="filter-group">
+                            <label>Genre:</label>
+                            <div class="genre-tags" id="genre-filters"></div>
+                        </div>
+                        <div class="filter-group">
+                            <label>Year:</label>
+                            <div class="year-range">
+                                <input type="number" id="year-from" placeholder="From" min="1900" max="2025">
+                                <span>-</span>
+                                <input type="number" id="year-to" placeholder="To" min="1900" max="2025">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label>Rating:</label>
+                            <div class="rating-range">
+                                <input type="range" id="rating-filter" min="0" max="10" step="0.5" value="0">
+                                <span id="rating-value">0+</span>
+                            </div>
+                        </div>
+                        <button id="apply-filters">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+            <div class="user-menu">
+                <button class="user-btn"><i class="fas fa-user"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Carousel Section -->
+        <section class="hero-carousel">
+            <div class="carousel-container" id="hero-carousel">
+                <!-- Carousel items will be dynamically inserted here -->
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel-indicators" id="hero-indicators"></div>
+                <button class="carousel-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Trending Section -->
+        <section class="content-section" id="trending-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Trending Now</h2>
+                    <div class="time-switch">
+                        <button class="active" data-time="day">Today</button>
+                        <button data-time="week">This Week</button>
+                    </div>
+                </div>
+                <div class="carousel-slider" id="trending-carousel">
+                    <!-- Trending items will be dynamically inserted here -->
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Movies Section -->
+        <section class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Popular Movies</h2>
+                    <a href="movies.html" class="view-all">View All</a>
+                </div>
+                <div class="carousel-slider" id="popular-movies-carousel">
+                    <!-- Popular movies will be dynamically inserted here -->
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Rated TV Shows Section -->
+        <section class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Top Rated TV Shows</h2>
+                    <a href="tvshows.html" class="view-all">View All</a>
+                </div>
+                <div class="carousel-slider" id="top-tvshows-carousel">
+                    <!-- Top rated TV shows will be dynamically inserted here -->
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Movies Section -->
+        <section class="content-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Upcoming Releases</h2>
+                </div>
+                <div class="carousel-slider" id="upcoming-carousel">
+                    <!-- Upcoming movies will be dynamically inserted here -->
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personalized Recommendations Section -->
+        <section class="content-section" id="recommendations-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Recommended For You</h2>
+                </div>
+                <div class="carousel-slider" id="recommendations-carousel">
+                    <!-- Recommendations will be dynamically inserted here -->
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>StreamFlix</h2>
+                    <p>Your ultimate streaming experience</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Navigation</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="movies.html">Movies</a></li>
+                            <li><a href="tvshows.html">TV Shows</a></li>
+                            <li><a href="#trending-section">Trending</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Categories</h3>
+                        <ul>
+                            <li><a href="movies.html?genre=28">Action</a></li>
+                            <li><a href="movies.html?genre=35">Comedy</a></li>
+                            <li><a href="movies.html?genre=18">Drama</a></li>
+                            <li><a href="movies.html?genre=27">Horror</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">DMCA</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+                <p>&copy; 2025 StreamFlix. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/carousel.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
