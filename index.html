@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head and style sections remain the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hashtag Remixer Pro</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
         :root {
             --primary-color: #4a90e2;
             --success-color: #2ecc71;
@@ -198,42 +196,40 @@
     <div class="container">
         <h1>Hashtag Remixer Pro</h1>
         <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
-                Visit 👉 <a href="https://hashtagsremixer.netlify.app/hashgen.html" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Hashtag Generator</a>
+            Visit 👉 <a href="https://hashtagsremixer.netlify.app/hashgen.html" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Hashtag Generator</a>
         </p>
         <p class="description">Enter your text with hashtags - only hashtags will be shuffled!</p>
         
         <div class="input-container">
-            <textarea id="inputHashtags" placeholder="Enter your text and hashtags here...">Caption👉 example.com #Example1 #Example2 #Example3 </textarea>
-            <div class="hashtag-count">0/25 hashtags</div>
+            <textarea id="inputHashtags" placeholder="Enter your text and hashtags here..." aria-label="Enter your hashtags here">Caption👉 example.com #Example1 #Example2 #Example3 </textarea>
+            <div class="hashtag-count" aria-live="polite">0/25 hashtags</div>
         </div>
 
         <div class="remix-button-container">
-            <button class="remix-btn" onclick="remixHashtags()">
+            <button class="remix-btn" onclick="remixHashtags()" aria-label="Remix Hashtags">
                 <i class="fas fa-random"></i>
                 Remix Hashtags
             </button>
         </div>
 
         <div class="output-section">
-            <div class="output-container" id="hashtagBox"></div>
+            <div class="output-container" id="hashtagBox" role="region" aria-live="polite"></div>
             <div class="copy-container">
-                <button class="copy-btn" id="copyButton" onclick="copyHashtags()">
+                <button class="copy-btn" id="copyButton" onclick="copyHashtags()" aria-label="Copy Hashtags to Clipboard">
                     <i class="fas fa-copy"></i>
                     Copy to Clipboard
                 </button>
             </div>
-            <div id="copyMessage" class="message">Copied to clipboard!</div>
+            <div id="copyMessage" class="message" role="alert">Copied to clipboard!</div>
         </div>
     </div>
 
     <script>
         function parseContent(input) {
-            // Split the input into lines to preserve line breaks
             const lines = input.split('\n');
             const result = [];
             const allHashtags = [];
             
-            // Process each line
             lines.forEach(line => {
                 const parts = [];
                 let currentText = '';
@@ -297,11 +293,9 @@
                 alert("Only the first 25 hashtags will be used.");
             }
 
-            // Shuffle hashtags
             let shuffledHashtags = shuffleArray(hashtags.slice(0, 25));
             let hashtagIndex = 0;
 
-            // Reconstruct the content with shuffled hashtags
             const outputContent = parsedContent.map(line => {
                 const lineContent = line.map(part => {
                     if (part.type === 'hashtag' && hashtagIndex < shuffledHashtags.length) {
@@ -325,7 +319,6 @@
                 return;
             }
 
-            // Get the text content while preserving line breaks
             const content = Array.from(hashtagBox.childNodes)
                 .map(node => node.textContent)
                 .join('');
@@ -342,99 +335,17 @@
             });
         }
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('inputHashtags').addEventListener('input', updateHashtagCount);
             updateHashtagCount();
             remixHashtags();
         });
     </script>
-    <div id="visitor-counter-root"></div>
 
-<script type="module">
-  // Initialize visitor counter
-  const counterContainer = document.getElementById('visitor-counter-root');
-  
-  // Track current session
-  let currentVisitors = parseInt(localStorage.getItem('currentVisitors')) || 1;
-  let totalVisits = parseInt(localStorage.getItem('totalVisits')) || 0;
-  
-  // Update counters
-  function updateCounters() {
-    // Increment total visits if this is a new session
-    if (!sessionStorage.getItem('counted')) {
-      totalVisits++;
-      localStorage.setItem('totalVisits', totalVisits);
-      sessionStorage.setItem('counted', 'true');
-    }
-    
-    // Update display
-    counterContainer.innerHTML = `
-      <div style="
-        margin-top: 2rem;
-        padding: 1rem;
-        background-color: #f8f9fa;
-        border-radius: 12px;
-        text-align: center;
-      ">
-        <div style="
-          display: flex;
-          justify-content: center;
-          gap: 2rem;
-        ">
-          <div>
-            <div style="
-              font-size: 1.5rem;
-              font-weight: bold;
-              color: var(--primary-color);
-            ">${currentVisitors}</div>
-            <div style="
-              font-size: 0.875rem;
-              color: #666;
-            ">Current Visitors</div>
-          </div>
-          <div>
-            <div style="
-              font-size: 1.5rem;
-              font-weight: bold;
-              color: var(--primary-color);
-            ">${totalVisits}</div>
-            <div style="
-              font-size: 0.875rem;
-              color: #666;
-            ">Total Visits</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  
-  // Update display initially
-  updateCounters();
-  
-  // Simulate other visitors (random number between 1-20)
-  setInterval(() => {
-    currentVisitors = Math.floor(Math.random() * 20) + 1;
-    localStorage.setItem('currentVisitors', currentVisitors);
-    updateCounters();
-  }, 30000); // Updates every 30 seconds
-  
-  // Update when user leaves
-  window.addEventListener('beforeunload', () => {
-    currentVisitors = Math.max(1, currentVisitors - 1);
-    localStorage.setItem('currentVisitors', currentVisitors);
-  });
-</script>
-    <div class="container">
-        <!-- Existing content -->
-
-        <!-- Add the footer section here, before the container closing tag -->
-        <div class="footer">
-            <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
-                Created with ♥️ by <a href="https://phcorner.org" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">PHC No rules</a>
-            </p>
-        </div>
-
-    </div> 
+    <footer class="footer">
+        <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
+            Created with ♥️ by <a href="https://phcorner.org" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">PHC No rules</a>
+        </p>
+    </footer>
 </body>
 </html>
