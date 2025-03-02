@@ -1,220 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Previous head and style sections remain the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamFlix - Your Movie & TV Streaming Platform</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/carousel.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Hashtag Remixer Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Previous styles remain the same */
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --warning-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border: 2px solid #e1e1e1;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .hashtag-count {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.875rem;
+            color: #666;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .remix-button-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remix-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .remix-btn:hover {
+            background-color: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .output-section {
+            margin-bottom: 2rem;
+        }
+
+        .output-container {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            min-height: 100px;
+            word-wrap: break-word;
+            border: 2px solid #e1e1e1;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .copy-container {
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .copy-btn {
+            background-color: var(--success-color);
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .copy-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .hashtag {
+            display: inline;
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            margin: 0 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            line-height: 2;
+        }
+
+        .normal-text {
+            display: inline;
+            white-space: pre-wrap;
+        }
+
+        .message {
+            text-align: center;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border-radius: var(--border-radius);
+            background-color: #d4edda;
+            color: #155724;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">StreamFlix</a>
-            </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="movies.html">Movies</a></li>
-                    <li><a href="tvshows.html">TV Shows</a></li>
-                    <li><a href="#" id="trending-toggle">Trending</a></li>
-                </ul>
-            </nav>
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" id="search-input" placeholder="Search for movies, TV shows...">
-                    <button id="search-btn"><i class="fas fa-search"></i></button>
-                </div>
-                <div class="search-results" id="search-results"></div>
-                <div class="advanced-search">
-                    <button id="advanced-search-toggle"><i class="fas fa-filter"></i> Filters</button>
-                    <div class="filter-options" id="filter-options">
-                        <div class="filter-group">
-                            <label>Genre:</label>
-                            <div class="genre-tags" id="genre-filters"></div>
-                        </div>
-                        <div class="filter-group">
-                            <label>Year:</label>
-                            <div class="year-range">
-                                <input type="number" id="year-from" placeholder="From" min="1900" max="2025">
-                                <span>-</span>
-                                <input type="number" id="year-to" placeholder="To" min="1900" max="2025">
-                            </div>
-                        </div>
-                        <div class="filter-group">
-                            <label>Rating:</label>
-                            <div class="rating-range">
-                                <input type="range" id="rating-filter" min="0" max="10" step="0.5" value="0">
-                                <span id="rating-value">0+</span>
-                            </div>
-                        </div>
-                        <button id="apply-filters">Apply Filters</button>
-                    </div>
-                </div>
-            </div>
-            <div class="user-menu">
-                <button class="user-btn"><i class="fas fa-user"></i></button>
-            </div>
+    <div class="container">
+        <h1>Hashtag Remixer Pro</h1>
+        <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
+                Visit 👉 <a href="https://hashtagsremixer.netlify.app/hashgen.html" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">Hashtag Generator</a>
+        </p>
+        <p class="description">Enter your text with hashtags - only hashtags will be shuffled!</p>
+        
+        <div class="input-container">
+            <textarea id="inputHashtags" placeholder="Enter your text and hashtags here...">Caption👉 example.com #Example1 #Example2 #Example3 </textarea>
+            <div class="hashtag-count">0/25 hashtags</div>
         </div>
-    </header>
 
-    <main>
-        <!-- Hero Carousel Section -->
-        <section class="hero-carousel">
-            <div class="carousel-container" id="hero-carousel">
-                <!-- Carousel items will be dynamically inserted here -->
-            </div>
-            <div class="carousel-controls">
-                <button class="carousel-prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="carousel-indicators" id="hero-indicators"></div>
-                <button class="carousel-next"><i class="fas fa-chevron-right"></i></button>
-            </div>
-        </section>
-
-        <!-- Trending Section -->
-        <section class="content-section" id="trending-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Trending Now</h2>
-                    <div class="time-switch">
-                        <button class="active" data-time="day">Today</button>
-                        <button data-time="week">This Week</button>
-                    </div>
-                </div>
-                <div class="carousel-slider" id="trending-carousel">
-                    <!-- Trending items will be dynamically inserted here -->
-                </div>
-                <div class="slider-controls">
-                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Popular Movies Section -->
-        <section class="content-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Popular Movies</h2>
-                    <a href="movies.html" class="view-all">View All</a>
-                </div>
-                <div class="carousel-slider" id="popular-movies-carousel">
-                    <!-- Popular movies will be dynamically inserted here -->
-                </div>
-                <div class="slider-controls">
-                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Top Rated TV Shows Section -->
-        <section class="content-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Top Rated TV Shows</h2>
-                    <a href="tvshows.html" class="view-all">View All</a>
-                </div>
-                <div class="carousel-slider" id="top-tvshows-carousel">
-                    <!-- Top rated TV shows will be dynamically inserted here -->
-                </div>
-                <div class="slider-controls">
-                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Upcoming Movies Section -->
-        <section class="content-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Upcoming Releases</h2>
-                </div>
-                <div class="carousel-slider" id="upcoming-carousel">
-                    <!-- Upcoming movies will be dynamically inserted here -->
-                </div>
-                <div class="slider-controls">
-                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Personalized Recommendations Section -->
-        <section class="content-section" id="recommendations-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Recommended For You</h2>
-                </div>
-                <div class="carousel-slider" id="recommendations-carousel">
-                    <!-- Recommendations will be dynamically inserted here -->
-                </div>
-                <div class="slider-controls">
-                    <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>StreamFlix</h2>
-                    <p>Your ultimate streaming experience</p>
-                </div>
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h3>Navigation</h3>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="movies.html">Movies</a></li>
-                            <li><a href="tvshows.html">TV Shows</a></li>
-                            <li><a href="#trending-section">Trending</a></li>
-                        </ul>
-                    </div>
-                    <div class="link-group">
-                        <h3>Categories</h3>
-                        <ul>
-                            <li><a href="movies.html?genre=28">Action</a></li>
-                            <li><a href="movies.html?genre=35">Comedy</a></li>
-                            <li><a href="movies.html?genre=18">Drama</a></li>
-                            <li><a href="movies.html?genre=27">Horror</a></li>
-                        </ul>
-                    </div>
-                    <div class="link-group">
-                        <h3>Legal</h3>
-                        <ul>
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">DMCA</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="footer-social">
-                    <h3>Follow Us</h3>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
-                <p>&copy; 2025 StreamFlix. All rights reserved.</p>
-            </div>
+        <div class="remix-button-container">
+            <button class="remix-btn" onclick="remixHashtags()">
+                <i class="fas fa-random"></i>
+                Remix Hashtags
+            </button>
         </div>
-    </footer>
 
-    <script src="js/api.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/carousel.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/main.js"></script>
+        <div class="output-section">
+            <div class="output-container" id="hashtagBox"></div>
+            <div class="copy-container">
+                <button class="copy-btn" id="copyButton" onclick="copyHashtags()">
+                    <i class="fas fa-copy"></i>
+                    Copy to Clipboard
+                </button>
+            </div>
+            <div id="copyMessage" class="message">Copied to clipboard!</div>
+        </div>
+    </div>
+
+    <script>
+        function parseContent(input) {
+            // Split the input into lines to preserve line breaks
+            const lines = input.split('\n');
+            const result = [];
+            const allHashtags = [];
+            
+            // Process each line
+            lines.forEach(line => {
+                const parts = [];
+                let currentText = '';
+                const words = line.split(/(\s+)/);
+                
+                words.forEach(word => {
+                    if (word.trim().startsWith('#')) {
+                        if (currentText) {
+                            parts.push({ type: 'text', content: currentText });
+                            currentText = '';
+                        }
+                        parts.push({ type: 'hashtag', content: word.trim() });
+                        allHashtags.push(word.trim());
+                    } else {
+                        currentText += word;
+                    }
+                });
+                
+                if (currentText) {
+                    parts.push({ type: 'text', content: currentText });
+                }
+                
+                result.push(parts);
+            });
+            
+            return { parsedContent: result, hashtags: allHashtags };
+        }
+
+        function updateHashtagCount() {
+            const input = document.getElementById('inputHashtags').value;
+            const { hashtags } = parseContent(input);
+            const countDisplay = document.querySelector('.hashtag-count');
+            countDisplay.textContent = `${hashtags.length}/25 hashtags`;
+            
+            if (hashtags.length > 25) {
+                countDisplay.style.color = '#e74c3c';
+            } else {
+                countDisplay.style.color = '#666';
+            }
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function remixHashtags() {
+            const input = document.getElementById('inputHashtags').value;
+            if (!input.trim()) {
+                alert("Please enter some text with hashtags!");
+                return;
+            }
+
+            const { parsedContent, hashtags } = parseContent(input);
+            
+            if (hashtags.length > 25) {
+                alert("Only the first 25 hashtags will be used.");
+            }
+
+            // Shuffle hashtags
+            let shuffledHashtags = shuffleArray(hashtags.slice(0, 25));
+            let hashtagIndex = 0;
+
+            // Reconstruct the content with shuffled hashtags
+            const outputContent = parsedContent.map(line => {
+                const lineContent = line.map(part => {
+                    if (part.type === 'hashtag' && hashtagIndex < shuffledHashtags.length) {
+                        return `<span class="hashtag">${shuffledHashtags[hashtagIndex++]}</span>`;
+                    } else if (part.type === 'text') {
+                        return `<span class="normal-text">${part.content}</span>`;
+                    }
+                    return '';
+                }).join('');
+                return lineContent;
+            }).join('\n');
+
+            const hashtagBox = document.getElementById('hashtagBox');
+            hashtagBox.innerHTML = outputContent;
+        }
+
+        function copyHashtags() {
+            const hashtagBox = document.getElementById('hashtagBox');
+            if (!hashtagBox.textContent.trim()) {
+                alert("No content to copy!");
+                return;
+            }
+
+            // Get the text content while preserving line breaks
+            const content = Array.from(hashtagBox.childNodes)
+                .map(node => node.textContent)
+                .join('');
+
+            navigator.clipboard.writeText(content).then(() => {
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.display = 'block';
+                setTimeout(() => {
+                    copyMessage.style.display = 'none';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy to clipboard. Please try again.');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('inputHashtags').addEventListener('input', updateHashtagCount);
+            updateHashtagCount();
+            remixHashtags();
+        });
+    </script>
+    <div id="visitor-counter-root"></div>
+
+<script type="module">
+  // Initialize visitor counter
+  const counterContainer = document.getElementById('visitor-counter-root');
+  
+  // Track current session
+  let currentVisitors = parseInt(localStorage.getItem('currentVisitors')) || 1;
+  let totalVisits = parseInt(localStorage.getItem('totalVisits')) || 0;
+  
+  // Update counters
+  function updateCounters() {
+    // Increment total visits if this is a new session
+    if (!sessionStorage.getItem('counted')) {
+      totalVisits++;
+      localStorage.setItem('totalVisits', totalVisits);
+      sessionStorage.setItem('counted', 'true');
+    }
+    
+    // Update display
+    counterContainer.innerHTML = `
+      <div style="
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        text-align: center;
+      ">
+        <div style="
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+        ">
+          <div>
+            <div style="
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--primary-color);
+            ">${currentVisitors}</div>
+            <div style="
+              font-size: 0.875rem;
+              color: #666;
+            ">Current Visitors</div>
+          </div>
+          <div>
+            <div style="
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--primary-color);
+            ">${totalVisits}</div>
+            <div style="
+              font-size: 0.875rem;
+              color: #666;
+            ">Total Visits</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Update display initially
+  updateCounters();
+  
+  // Simulate other visitors (random number between 1-20)
+  setInterval(() => {
+    currentVisitors = Math.floor(Math.random() * 20) + 1;
+    localStorage.setItem('currentVisitors', currentVisitors);
+    updateCounters();
+  }, 30000); // Updates every 30 seconds
+  
+  // Update when user leaves
+  window.addEventListener('beforeunload', () => {
+    currentVisitors = Math.max(1, currentVisitors - 1);
+    localStorage.setItem('currentVisitors', currentVisitors);
+  });
+</script>
+    <div class="container">
+        <!-- Existing content -->
+
+        <!-- Add the footer section here, before the container closing tag -->
+        <div class="footer">
+            <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">
+                Created with ♥️ by <a href="https://phcorner.org" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: bold;">PHC No rules</a>
+            </p>
+        </div>
+
+    </div> 
 </body>
 </html>
