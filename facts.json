@@ -1,7 +1,4 @@
-import json
-
-# Base movie facts (a small diverse set)
-base_facts = [
+[
     "The original 'Back to the Future' time machine was a refrigerator.",
     "Tom Hanks turned down the role of Jerry Maguire.",
     "The sound of a T-Rex in 'Jurassic Park' was made using elephant sounds.",
@@ -48,18 +45,3 @@ suffixes = [
     "Worth noting.", 
     "Fascinating, isn't it?"
 ]
-
-# Generate all unique combinations
-generated_facts = []
-for fact in base_facts:
-    for prefix in prefixes:
-        for suffix in suffixes:
-            # Combine prefix, base fact, and suffix (avoid extra spaces)
-            combined = f"{prefix} {fact} {suffix}".strip()
-            # Remove extra spaces that might occur if suffix is empty
-            combined = " ".join(combined.split())
-            generated_facts.append(combined)
-
-# Remove duplicates (if any) and sort the list for consistency
-unique_facts = list(set(generated_facts))
-unique_facts.sort()
