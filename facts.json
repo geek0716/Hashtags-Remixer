@@ -1,47 +1,109 @@
 [
-    "The original 'Back to the Future' time machine was a refrigerator.",
-    "Tom Hanks turned down the role of Jerry Maguire.",
-    "The sound of a T-Rex in 'Jurassic Park' was made using elephant sounds.",
-    "Heath Ledger directed the Joker's homemade videos in 'The Dark Knight'.",
-    "Pixar's 'Toy Story' was the first fully computer-animated feature film.",
-    "Bruce Willis was almost cast as Sam in 'Ghost'.",
-    "Robin Williams was considered for Hagrid in 'Harry Potter'.",
-    "In 'Pulp Fiction', all the clocks are set to 4:20.",
-    "The DeLorean was chosen in 'Back to the Future' over a fridge to avoid safety concerns.",
-    "The language spoken by the Minions in 'Despicable Me' is called 'Minionese'.",
-    "The Joker’s tongue flicking in 'The Dark Knight' was an improvisation by Heath Ledger.",
-    "Darth Vader has only 12 minutes of screen time in 'A New Hope'.",
-    "The scream used in many movies, the 'Wilhelm scream,' dates back to 1951.",
-    "Gollum’s voice in 'The Lord of the Rings' was inspired by a cat coughing up a hairball.",
-    "The first movie to show a toilet flushing was 'Psycho' (1960).",
-    "Morgan Freeman got his first major movie role at 50.",
-    "The velociraptor sounds in 'Jurassic Park' were made using tortoises mating.",
-    "Leonardo DiCaprio had to eat raw bison liver for 'The Revenant'.",
-    "The iconic 'Darth Vader' breathing sound was made using a scuba mask.",
-    "Harrison Ford was a carpenter before landing his role in 'Star Wars'.",
-    "The code in 'The Matrix' is actually sushi recipes.",
-    "Jack Nicholson’s contract for 'Batman' (1989) earned him over $50 million.",
-    "The snow in 'The Wizard of Oz' was asbestos.",
-    "Daniel Radcliffe broke about 80 wands while filming 'Harry Potter'.",
-    "The 'Inception' hallway fight scene was filmed using a real rotating set.",
-]
 
-# Define a list of prefixes and suffixes to generate variations.
-prefixes = [
-    "Surprisingly,", 
-    "Remarkably,", 
-    "Interestingly,", 
-    "Incredibly,", 
-    "Notably,", 
-    "Curiously,", 
-    "Amazingly,"
-]
-suffixes = [
-    "", 
-    "This is a fun fact.", 
-    "Did you know?", 
-    "Truly remarkable!", 
-    "It's amazing!", 
-    "Worth noting.", 
-    "Fascinating, isn't it?"
+    "The lightsaber sound in 'Star Wars' was created by blending the hum of an old projector with a TV's buzz.",
+
+    "James Cameron drew the iconic door sketch of Rose in 'Titanic' himself.",
+
+    "The horse head in 'The Godfather' was real, sourced from a dog food company.",
+
+    "During 'Mad Max: Fury Road,' most of the stunts were practical rather than CGI.",
+
+    "Robert Downey Jr. hid food around the 'Avengers' set and ate during takes, making it into the film.",
+
+    "The Xenomorph from 'Alien' was inspired by Swiss artist H.R. Giger’s biomechanical artwork.",
+
+    "Morgan Freeman's voice was deemed so iconic, a GPS company once offered him a deal to be their voice.",
+
+    "Tom Cruise performs most of his own stunts, including the HALO jump in 'Mission: Impossible – Fallout.'",
+
+    "The word 'supercalifragilisticexpialidocious' in 'Mary Poppins' has 34 letters.",
+
+    "The ruby slippers from 'The Wizard of Oz' were originally silver in the book but changed for Technicolor.",
+
+    "Alfred Hitchcock’s 'Psycho' was the first film to show a toilet flushing on screen.",
+
+    "The 'Wilhelm scream' sound effect has appeared in hundreds of films since 'Distant Drums' (1951).",
+
+    "Marlon Brando used cue cards taped everywhere on set during 'The Godfather.'",
+
+    "Jackie Chan has broken nearly every bone in his body while performing stunts.",
+
+    "The famous bullet-dodging scene in 'The Matrix' introduced the world to 'bullet time' cinematography.",
+
+    "In 'The Dark Knight,' the hospital explosion was a real building demolition that required perfect timing.",
+
+    "The DeLorean in 'Back to the Future' was almost a fridge before filmmakers decided against it.",
+
+    "To film 'Gravity,' Sandra Bullock was alone in a giant mechanical rig for most scenes.",
+
+    "Anthony Hopkins only appears in 'The Silence of the Lambs' for 16 minutes but won an Oscar for it.",
+
+    "Christopher Nolan used zero CGI for the rotating hallway fight scene in 'Inception.'",
+
+    "The first feature-length animated movie was Disney’s 'Snow White and the Seven Dwarfs' (1937).",
+
+    "Arnold Schwarzenegger spoke only 17 lines in the original 'Terminator' film.",
+
+    "The Joker’s slow clap in 'The Dark Knight' was improvised by Heath Ledger.",
+
+    "In 'Pulp Fiction,' the briefcase’s glowing contents remain a mystery to this day.",
+
+    "Hugh Jackman took ice-cold showers every morning while playing Wolverine to get into character.",
+
+    "A prop phone booth in 'The Matrix' had to be custom-built because they were obsolete by 1999.",
+
+    "To play Gollum in 'The Lord of the Rings,' Andy Serkis drank a special mixture of honey and lemon to perfect the voice.",
+
+    "The iconic boulder chase in 'Indiana Jones: Raiders of the Lost Ark' used a 300-pound fiberglass rock.",
+
+    "A single CGI scene in 'Avatar' took 47 hours to render.",
+
+    "Tom Hanks was not the first choice for 'Forrest Gump'; John Travolta turned it down.",
+
+    "The Batmobile in 'Batman Begins' could actually drive and hit speeds of 100 mph.",
+
+    "Stanley Kubrick shot 127 takes of a single scene in 'The Shining'—a record for dialogue scenes.",
+
+    "Benedict Cumberbatch recorded Smaug’s voice while crawling on all fours for realism in 'The Hobbit.'",
+
+    "The first CGI character ever in a movie was the stained-glass knight in 'Young Sherlock Holmes' (1985).",
+
+    "Daniel Craig wore gloves during 'Skyfall,' accidentally forcing reshoots when they interfered with continuity.",
+
+    "The dog in 'The Thing' (1982) was an incredibly well-trained wolf hybrid named Jed.",
+
+    "In 'The Revenant,' Leonardo DiCaprio actually ate raw bison liver despite being a vegetarian.",
+
+    "To create WALL-E’s voice, Ben Burtt used an old Apple Macintosh startup sound as inspiration.",
+
+    "Tim Burton considered casting Nicolas Cage as Superman in the late '90s.",
+
+    "The 'Jaws' shark was nicknamed 'Bruce' after Spielberg’s lawyer.",
+
+    "Dustin Hoffman stayed awake for 48 hours to look exhausted in 'Marathon Man.'",
+
+    "Some of 'The Lord of the Rings' costumes had real chainmail and weighed up to 55 pounds.",
+
+    "The rain in 'Jurassic Park' was actually a mix of real water and glycerin for better visibility.",
+
+    "A single day of filming 'Mad Max: Fury Road' generated 400 hours of footage.",
+
+    "The blood in 'Psycho' was actually chocolate syrup.",
+
+    "The iconic T. rex roar in 'Jurassic Park' was made from a mix of baby elephant sounds and alligator growls.",
+
+    "Bruce Willis wasn’t the original choice for 'Die Hard'; it was meant for Frank Sinatra.",
+
+    "Only one prop from 'Titanic'—the Heart of the Ocean necklace—has never been found.",
+
+    "Samuel L. Jackson’s 'Pulp Fiction' wallet actually belonged to Quentin Tarantino.",
+
+    "Chris Pratt stole his Star-Lord costume from 'Guardians of the Galaxy' to visit sick children in hospitals.",
+
+    "The hoverboard in 'Back to the Future Part II' isn’t real, despite rumors it was a prototype.",
+
+    "The 'Shrek' script was originally meant for Chris Farley before his passing.",
+
+    "Gene Wilder made up Willy Wonka’s somersault entrance in 'Charlie and the Chocolate Factory' to confuse viewers.",
+
 ]
