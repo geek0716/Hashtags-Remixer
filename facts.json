@@ -1,4 +1,7 @@
-[
+import json
+
+# Base movie facts (a small diverse set)
+base_facts = [
     "The original 'Back to the Future' time machine was a refrigerator.",
     "Tom Hanks turned down the role of Jerry Maguire.",
     "The sound of a T-Rex in 'Jurassic Park' was made using elephant sounds.",
