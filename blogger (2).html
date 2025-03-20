@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie & TV Show Landing Page Creator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-gray-800">Movie & TV Show Landing Page Creator</h1>
+            <p class="text-gray-600 mt-2">Create Blogger posts for Movies & TV Shows using TMDB API</p>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <label for="mediaType" class="block text-gray-700 font-medium mb-2">Select Type</label>
+                    <select id="mediaType" class="w-full px-4 py-2 border rounded-lg">
+                        <option value="movie">Movie</option>
+                        <option value="tv">TV Show</option>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label for="movieTitle" class="block text-gray-700 font-medium mb-2">Title</label>
+                    <input type="text" id="movieTitle" class="w-full px-4 py-2 border rounded-lg" placeholder="Enter title">
+                </div>
+                <div class="mt-6">
+                    <button id="searchBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <div id="preview" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Preview & Export</h2>
+                <div id="moviePreview"></div>
+                <textarea id="htmlContent" class="w-full h-96 p-4 border rounded-lg font-mono text-sm" readonly></textarea>
+                <button id="copyHtmlBtn" class="bg-green-600 text-white px-6 py-2 mt-4 rounded-lg hover:bg-green-700">Copy HTML</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
+        document.getElementById('searchBtn').addEventListener('click', searchMedia);
+
+        async function searchMedia() {
+            const query = document.getElementById('movieTitle').value.trim();
+            const mediaType = document.getElementById('mediaType').value;
+            if (!query) return;
+
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/search/${mediaType}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                displayResults(data.results.slice(0, 6), mediaType);
+            } catch (error) {
+                console.error("Error fetching data", error);
+            }
+        }
+
+        function displayResults(results, mediaType) {
+            const resultsEl = document.getElementById('results');
+            resultsEl.innerHTML = "";
+            results.forEach(item => {
+                const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Poster';
+                const card = document.createElement('div');
+                card.className = 'movie-card bg-white rounded-lg overflow-hidden p-4';
+                card.innerHTML = `<img src="${poster}" class="w-full h-64 object-cover"><h3 class="font-bold">${item.name || item.title}</h3><button class="select-btn bg-blue-600 text-white px-4 py-1 mt-2 rounded" data-id="${item.id}" data-type="${mediaType}">Select</button>`;
+                resultsEl.appendChild(card);
+                card.querySelector('.select-btn').addEventListener('click', () => createLandingPage(item.id, mediaType));
+            });
+        }
+
+        async function createLandingPage(id, mediaType) {
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,images,seasons`);
+                const data = await response.json();
+                document.getElementById('preview').classList.remove('hidden');
+                document.getElementById('moviePreview').innerHTML = generatePreviewHtml(data, mediaType);
+                document.getElementById('htmlContent').value = generateBloggerHtml(data, mediaType);
+            } catch (error) {
+                console.error("Error fetching details", error);
+            }
+        }
+
+        function generatePreviewHtml(data, mediaType) {
+            const posterUrl = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Poster';
+            return `<div><img src="${posterUrl}" alt="${data.name || data.title}"><h1>${data.name || data.title}</h1><p>${data.overview}</p></div>`;
+        }
+
+        function generateBloggerHtml(data, mediaType) {
+            const posterUrl = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : 'https://via.placeholder.com/300x450?text=No+Poster';
+            const trailer = data.videos?.results?.find(video => video.site === 'YouTube' && video.type === 'Trailer');
+            return `
+<div style="max-width: 800px; margin: 0 auto;">
+    <img src="${posterUrl}" alt="${data.name || data.title}" style="width: 100%; border-radius: 8px;">
+    <h1 style="font-size: 2rem; font-weight: bold;">${data.name || data.title}</h1>
+    <p>${data.overview}</p>
+    ${trailer ? `<a href="https://www.youtube.com/watch?v=${trailer.key}" target="_blank" style="display: block; background-color: red; color: white; padding: 10px; text-align: center; text-decoration: none; border-radius: 4px;">Watch Trailer</a>` : ''}
+</div>
+            `;
+        }
+
+        document.getElementById('copyHtmlBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('htmlContent').value);
+            alert("HTML copied!");
+        });
+    </script>
+</body>
+</html>
